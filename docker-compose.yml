@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+
+  backend:
+    container_name: backend
+    build: 
+      context: ./backend
+      dockerfile: backend.dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  frontend:
+    container_name: frontend
+    build: 
+      context: ./frontend/front-freedom
+      dockerfile: frontend.dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  database:
+    container_name: database
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    networks:
+      - app-network
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

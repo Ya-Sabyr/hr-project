@@ -1,0 +1,9 @@
+.venv/
+.env
+assistant.py
+backend/venv/
+
+*.pyc
+__pycache__/
+
+database/database.sql
