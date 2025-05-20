@@ -20,31 +20,15 @@ def get_llm():
     )
 
 def get_blob_service_client():
-    """
-    Provides an instance of BlobServiceClient configured with environment variables.
-    """
     return BlobServiceClient.from_connection_string(BackendConfig.AZURE_STORAGE_CONNECTION_STRING)
 
 def get_resume_service(
-    resume_database=ResumeDatabase,
     llm=Depends(get_llm),
     blob_service_client=Depends(get_blob_service_client)
 ):
-    """
-    Provides an instance of ResumeService configured with dependencies.
-    """
     return ResumeService(
-        resume_database=resume_database,
+        resume_database=ResumeDatabase(),
         llm=llm,
         blob_service_client=blob_service_client,
         container_name=BackendConfig.AZURE_STORAGE_CONTAINER_NAME
-    )
-
-def get_vacancy_service(llm=Depends(get_llm)):
-    """
-    Provides an instance of VacancyService configured with dependencies.
-    """
-    return VacancyService(
-        vacancy_database=VacancyDatabase,
-        llm=llm
     )

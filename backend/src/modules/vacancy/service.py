@@ -10,12 +10,12 @@ from langchain_openai import AzureChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
 from langchain_core.runnables import RunnableLambda
 import json
-from backend.src.core.config import BackendConfig
+from src.core.config import BackendConfig
 
 
 class VacancyService:
-    def __init__(self, vacancy_database = VacancyDatabase, llm = None):
-        self.llm = llm,
+    def __init__(self, vacancy_database = VacancyDatabase, llm = AzureChatOpenAI):
+        self.llm = llm
         self.vacancy_database = vacancy_database
 
     async def classify_vacancy_with_ai(self, description: str) -> list[dict]:
@@ -36,8 +36,7 @@ class VacancyService:
         ]
 
         try:
-            runnable = RunnableLambda(lambda x: self.llm.invoke(x))
-            response = await runnable.ainvoke(messages)
+            response = await self.llm.ainvoke(messages)
         except Exception as e:
             logging.error(f"[AI ERROR] OpenAI request failed: {e}")
             raise ValueError("Error during AI query")
@@ -78,14 +77,10 @@ class VacancyService:
 
     
         valid_options = {(p["profession"], p["grade"]) for p in suggested_professions}
-        if (vacancy_data.title, vacancy_data.position) not in valid_options:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Choose a profession and level from the AI on offer: {suggested_professions}"
-            )
+
 
         vacancy = Vacancy(**vacancy_data.model_dump(), hr_id=hr.id, company=hr.company)
-        new_vacancy = await self.vacancy_database.create_vacancy(db, vacancy)
+        new_vacancy = await self.vacancy_database.create_vacancy(db=db, vacancy=vacancy)
 
         logging.info(f"✅ [VACANCY CREATED] Vacancy ID {new_vacancy.id} created successfully")
         return new_vacancy

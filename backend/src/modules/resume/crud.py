@@ -4,11 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ResumeCreate
 
 class ResumeDatabase():
-    async def get_resume_by_id(db: AsyncSession, resume_id: int):
+    async def get_resume_by_id(self, db: AsyncSession, resume_id: int):
         result = await db.execute(select(Resume).where(Resume.id == resume_id))
         return result.scalar_one_or_none()
 
-    async def create_resume(db: AsyncSession, resume_data: ResumeCreate) -> Resume:
+    async def create_resume(self, db: AsyncSession, resume_data: ResumeCreate) -> Resume:
         resume = Resume(**resume_data.model_dump())  
         db.add(resume)
         try:
@@ -20,6 +20,6 @@ class ResumeDatabase():
         return resume
 
 
-    async def get_resumes_by_user_id(db: AsyncSession, user_id: int):
+    async def get_resumes_by_user_id(self, db: AsyncSession, user_id: int):
         result = await db.execute(select(Resume).where(Resume.user_id == user_id))
         return result.scalars().all()

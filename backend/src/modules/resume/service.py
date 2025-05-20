@@ -1,4 +1,3 @@
-# src/modules/resume/service.py
 from typing import Union
 import uuid
 import json
@@ -6,9 +5,10 @@ import logging
 from datetime import datetime
 import httpx
 from azure.storage.blob.aio import BlobServiceClient
+from langchain_openai import AzureChatOpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, UploadFile
-from backend.src.core.config import BackendConfig
+from src.core.config import BackendConfig
 import fitz
 from .crud import ResumeDatabase
 from .schemas import ResumeCreate
@@ -23,7 +23,7 @@ class ResumeService:
     def __init__(
         self,
         resume_database=ResumeDatabase,
-        llm=None,
+        llm=AzureChatOpenAI,
         blob_service_client: BlobServiceClient = None,
         container_name: str = None
     ):

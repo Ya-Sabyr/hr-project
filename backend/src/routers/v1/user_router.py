@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.src.core.database import get_db
-from backend.src.modules.application.dependencies import get_application_service
-from backend.src.modules.resume.dependencies import get_resume_service
-from backend.src.modules.vacancy.dependencies import get_vacancy_service
+from src.core.database import get_db
+from src.modules.application.dependencies import get_application_service
+from src.modules.resume.dependencies import get_resume_service
+from src.modules.vacancy.dependencies import get_vacancy_service
 from src.core.dependencies import get_current_user, user_required
 from src.modules.vacancy.schemas import VacancyPublic
 from src.modules.vacancy.service import VacancyService
@@ -19,7 +19,7 @@ from src.modules.user.service import UserService
 from src.modules.user.dependencies import get_user_service
 import logging
 
-router = APIRouter(prefix="/user", tags=["User"], dependencies=[Depends(user_required)])
+router = APIRouter(prefix="/user", tags=["User"])
 
 @router.get("/profile", response_model=UserProfile)
 async def get_user_profile(

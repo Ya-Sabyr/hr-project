@@ -1,7 +1,7 @@
-# src/modules/application/service.py
 import logging
 import json
 from fastapi import HTTPException
+from langchain_openai import AzureChatOpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.models import Resume, Vacancy, ApplicationStatusEnum
 from .crud import ApplicationDatabase
@@ -19,7 +19,7 @@ class ApplicationService:
         application_database = ApplicationDatabase,
         vacancy_service = VacancyService,
         resume_service = ResumeService,
-        llm = None
+        llm = AzureChatOpenAI
     ):
         self.application_database = application_database
         self.vacancy_service = vacancy_service

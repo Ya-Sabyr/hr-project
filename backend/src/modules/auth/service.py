@@ -2,6 +2,7 @@ import logging
 import jwt
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.modules.admin.schemas import AdminCreate
 
 from src.modules.user.service import UserService
 from src.modules.hr.service import HRService
@@ -45,6 +46,15 @@ class AuthService:
 
         logging.info(f"✅ [HR REGISTRATION REQUEST] HR registration request submitted for {hr_create.email}, awaiting admin approval.")
         return {"detail": "HR registration request submitted. Waiting for admin approval."}
+    
+    async def register_admin(self, admin_create: AdminCreate, db: AsyncSession) -> dict:
+        logging.info(f"[ADMIN REGISTRATION] Registering ADMIN: {admin_create.email}")
+        
+        admin = await self.admin_service.create_admin(db, admin_create)  
+
+        logging.info(f"✅ [ADMIN REGISTRATION REQUEST] ADMIN registration request submitted for {admin_create.email}")
+        return {"detail": "ADMIN registration request submitted."}
+
 
 
     async def authenticate_user(self, email: str, password: str, db: AsyncSession):
@@ -57,7 +67,7 @@ class AuthService:
                 logging.warning(f"❗ [BLOCKED USER] Blocked user {email} attempted to log in")
                 raise HTTPException(status_code=403, detail="User account is blocked")
 
-            access_token, refresh_token = await AuthService._generate_tokens(user.id, "user")
+            access_token, refresh_token = await self._generate_tokens(user.id, "user")
             logging.info(f"✅ [USER AUTHENTICATION SUCCESS] User {email} authenticated successfully")
             return access_token, refresh_token, "user", user.id
 
@@ -72,14 +82,14 @@ class AuthService:
                 logging.warning(f"❗ [BLOCKED HR] Blocked HR {email} attempted to log in")
                 raise HTTPException(status_code=403, detail="HR account is blocked")
 
-            access_token, refresh_token = await AuthService._generate_tokens(hr.id, "hr")
+            access_token, refresh_token = await self._generate_tokens(hr.id, "hr")
             logging.info(f"✅ [HR AUTHENTICATION SUCCESS] HR {email} authenticated successfully")
             return access_token, refresh_token, "hr", hr.id
 
         # Check for admin
         admin = await self.admin_service.get_admin_by_email(db, email)
         if admin and await self.password_manager.verify_password(password, admin.password):
-            access_token, refresh_token = await AuthService._generate_tokens(admin.id, "admin")
+            access_token, refresh_token = await self._generate_tokens(admin.id, "admin")
             logging.info(f"✅ [ADMIN AUTHENTICATION SUCCESS] Admin {email} authenticated successfully")
             return access_token, refresh_token, "admin", admin.id
 
@@ -100,7 +110,7 @@ class AuthService:
             user_type = payload.get("type")
 
             logging.info(f"✅ [REFRESH TOKEN SUCCESS] Token verified for user_id={user_id}, user_type={user_type}")
-            return await AuthService._generate_tokens(user_id, user_type)
+            return await self._generate_tokens(user_id, user_type)
 
         except jwt.ExpiredSignatureError:
             logging.error(f"❌ [EXPIRED TOKEN] Expired refresh token used")

@@ -7,7 +7,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from backend.src.core.config import backend_config
+from src.core.config import backend_config
 
 DATABASE_URL = backend_config.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 # Create the SQLAlchemy engine

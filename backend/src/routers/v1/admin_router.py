@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 from fastapi import APIRouter, Depends
-from backend.src.core.database import get_db
-from backend.src.modules.admin.dependencies import get_admin_user_service, get_admin_hr_service, get_admin_service
-from backend.src.modules.vacancy.dependencies import get_vacancy_service
+from src.core.database import get_db
+from src.modules.admin.dependencies import get_admin_user_service, get_admin_hr_service
+from src.modules.vacancy.dependencies import get_vacancy_service
 from src.core.dependencies import admin_required
 from src.modules.admin.services.hr_admin_service import HRAdminService
 from src.modules.admin.services.user_admin_service import UserAdminService

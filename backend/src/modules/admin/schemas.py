@@ -24,3 +24,7 @@ class HRInDBAdmin(HRBase):
 
     class Config:
         orm_mode = True
+
+class AdminCreate(BaseModel):
+    email: EmailStr
+    password: str

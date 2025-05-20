@@ -2,8 +2,8 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.src.core.database import get_db
-from backend.src.modules.auth.service import AuthService
+from src.core.database import get_db
+from src.modules.auth.service import AuthService
 from src.modules.hr.dependencies import get_hr_service
 from src.modules.hr.service import HRService
 from src.core.dependencies import get_current_user, hr_required
