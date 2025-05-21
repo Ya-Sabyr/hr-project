@@ -2,7 +2,7 @@ import axios from "axios";
 import { AuthService } from "../services/auth.service";
 
 const axiosInstance = axios.create({
-  baseURL: "http://143.198.123.176:3000",
+  baseURL: "http://143.198.123.176:8000",
 
   headers: {
     "Content-Type": "application/json",
@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
       try {
         const refreshToken = AuthService.getRefreshToken();
         const response = await axios.post(
-          "http://143.198.123.176:3000/api/v1/auth/refresh",
+          "http://143.198.123.176:8000/api/v1/auth/refresh",
           {
             refresh_token: refreshToken,
           }
