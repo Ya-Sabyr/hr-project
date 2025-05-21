@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosMultipartInstance = axios.create({
-  baseURL: 'http://localhost:8000', // Replace with your API base URL
+  baseURL: 'http://143.198.123.176:3000', // Replace with your API base URL
   headers: {
     'Content-Type': 'multipart/form-data',
   },

@@ -24,3 +24,4 @@ aiohttp
 langchain
 langchain-openai
 langchain_core
+gunicorn==23.0.0
