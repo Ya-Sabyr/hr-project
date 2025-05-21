@@ -110,4 +110,4 @@ async def get_vacancies_under_review(
     vacancy_service: VacancyService = Depends(get_vacancy_service)
 ):
     logging.info("[VACANCY FETCH] Fetching vacancies under review")
-    return await vacancy_service.get_vacancies_under_review(db),
+    return await vacancy_service.get_vacancies_under_review(db)

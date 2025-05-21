@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -20,8 +20,8 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.post("/api/v1/auth/login", {
-        email,
+      const response = await axiosInstance.postForm("/api/v1/auth/login", {
+        username,
         password,
       });
 
@@ -49,7 +49,7 @@ export default function Login() {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.detail ||
-            "Неверный email или пароль. Попробуйте снова."
+            "Неверный username или пароль. Попробуйте снова."
         );
 
         setPassword(""); // drop pasword
@@ -86,7 +86,7 @@ export default function Login() {
 
           <div>
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block mb-1 text-sm font-medium text-black"
             >
               Email:
@@ -97,9 +97,9 @@ export default function Login() {
                 size={18}
               />
               <input
-                type="email"
-                id="email"
-                value={email}
+                type="username"
+                id="username"
+                value={username}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full pl-10 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 truncate"

@@ -60,5 +60,5 @@ class VacancyInDBBase(VacancyBase):
     id: int
     status: VacancyStatusEnum
 
-    class VacancyBase:
-        from_attributes = True
+    class Config:
+        orm_mode = True
