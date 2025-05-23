@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const axiosMultipartInstance = axios.create({
-  baseURL: 'http://143.198.123.176:8000', // Replace with your API base URL
+  baseURL: API_BASE_URL, // API base URL from env
   headers: {
     'Content-Type': 'multipart/form-data',
   },
